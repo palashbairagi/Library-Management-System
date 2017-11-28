@@ -1,0 +1,49 @@
+create table member (
+id char(20) primary key,
+firstName char(20)Not null,
+lastName char(20)Not null,
+emailId char(50)Not null,
+phoneNumber char(50)Not null,
+sex char(6)default 'Male' check ('Male','Female') ,
+address char(200)Not null,
+dateOfBirth Date Not null
+)
+
+create table book(
+id int primary key,
+title char(50) Not null,
+authorName char(50)Not null,
+publisher char(50)Not null,
+subject char(50)Not null,
+category char(50)Not null,
+edition char(5)Not null,
+currentHolder int Not null default 0, 
+availableStock int Not null
+)
+
+create table ReferenceBook (
+id int primary key Not null,
+title char(50)Not null,
+authorName char(50)Not null,
+publisher char(50)Not null, 
+category char(50)Not null, 
+edition int(5)Not null, 
+totalStock int Not null
+)
+
+create table issue(
+memberId char(20),
+bookId int,
+issueDate date Not null,
+submissionDate date Not null,
+foreign key(memberId)references member(id),
+foreign key(bookId)references book(id)
+)
+
+create view issueView 
+as SELECT 
+member.id as "memberId",member.firstName,member.lastname,member.phoneNumber,
+book.id as "bookId",book.authorname,book.title,book.edition,book.currentHolder,
+book.availableStock,issue.issueDate,issue.submissionDate
+from issue,book,member
+where issue.memberid=member.id and issue.bookid=book.id
